@@ -2,6 +2,8 @@ var auth = require('./auth.json');
 
 var Discord = require('discord.js');
 
+var prompts = require('./prompts.json');
+
 var bot = new Discord.Client();
 
 var isOrgieStarted = false;
@@ -131,9 +133,18 @@ bot.on('message', message =>{
 	}
 });
 
+bot.on ('message', message =>{
+	if (message.content === "!prompt") {
+		var themes = prompts.writingPrompts;
+		var randomNumberRaw = Math.floor(Math.random() * (themes.length) - 1);
+		var thisPrompt = themes [randomNumberRaw];
+		message.channel.sendMessage('Your prompt is "' + thisPrompt +'"');
+	}
+});
+
 bot.on('message', message =>{
 	if (message.content === '!aide') {
-		message.channel.sendMessage("Bonjour! Je m'appelle Omlabot, codé et roulé par Omlahid!\nVoici ma liste de commandes:\n`!aide`: Pour savoir ma liste de commandes.\n`!orgie 10, 15, 20 ou 30`: Pour commencer une orgie de 10, 15, 20 ou 30 minutes. \n`!wordcount`: Pour savoir il faut avoir combien de mots au total aujourd'hui\n`Who da best?`: To know who's the best :) \nEnjoy!");
+		message.channel.sendMessage("Bonjour! Je m'appelle Omlabot, codé et roulé par Omlahid!\nVoici ma liste de commandes:\n`!aide`: Pour savoir ma liste de commandes.\n`!orgie 10, 15, 20 ou 30`: Pour commencer une orgie de 10, 15, 20 ou 30 minutes. \n`!wordcount`: Pour savoir il faut avoir combien de mots au total aujourd'hui\n`!prompt`: Pour recevoir un prompt d'écriture. \n`Who da best?`: To know who's the best :) \nEnjoy!");
 	}
 });
 
