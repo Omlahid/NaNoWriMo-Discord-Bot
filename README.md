@@ -13,4 +13,11 @@ Then, you need to open the auth.json file, and enter the e-mail and password of 
 
 ##I-Have-No-Idea-What-I'm-Doing Documentation
 
-(to follow shortly)
+1. Download [node.js](https://nodejs.org/en/). You need at least version 6.0.0, so use the most recent. You need this to download discord.js and also to run the bot itself, although you might not realize it.
+2.Download [discord.js](https://github.com/hydrabolt/discord.js/). In Windows, open the command prompt (search for CMD), and enter the following: node install --save discord.js --production
+3.Once the download is completed, download the file from this github.
+4.Open the auth.json file (you can simply use notepad for this, or the better version [notepad++](https://notepad-plus-plus.org/download/v7.html).
+5.Change the e-mail and the password to an account you created for your bot (recommended). You can also enter your own information, in which case you will act as the bot.
+6.Save the file.
+7.Run start.bat by double-clicking it. You should see your bot connected to your server.
+8.Type !aide to know more about the current features.
