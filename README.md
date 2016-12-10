@@ -3,13 +3,13 @@
 
 This bot (Omlabot) is a small bot I've created. It uses the discord.js library, and is deployed through node.js.
 
-It is currently only in French, but I plan to translate it to English soon. It was built to support the Quebec city region NaNoWriMo group.
+As of 2016/12/10, the bot supports French and English messages. Edit the `auth.json` to change the language.
 
 ## I-Know-What-I'm-Doing Documentation
 
 For this bot to work, you need to have node.js 6.0.0+ installed. This is to download [discord.js](https://github.com/hydrabolt/discord.js/), which is required to run this bot.
 
-Then, you need to open the auth.json file, and enter the e-mail and password of the account that will serve as your bot. You then simply need to run start.bat.
+Then, you need to open the auth.json file, and enter the e-mail and password of the account that will serve as your bot. You then simply need to run `start.bat`.
 
 ## I-Have-Never-Done-Anything-Like-This-Before Documentation
 
@@ -35,4 +35,4 @@ Then, you need to open the auth.json file, and enter the e-mail and password of 
 
 7. Run `start.bat` by double-clicking it. You should see your bot connected to your server.
 
-8. Type `!aide` to know more about the current features.
+8. Type `!help` to know more about the current features (or type `!aide` if you changed the language to French).
