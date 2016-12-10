@@ -6,107 +6,151 @@ var prompts = require('./prompts.json');
 
 var bot = new Discord.Client();
 
-var isOrgieStarted = false;
+var isSprintStarted = false;
+
+var language = auth.language;
+
+if (language == "fr") {
+	console.log("French language detected. Logs are still in English.");
+} else if (language == "en") {
+	console.log("English language detected.");
+} else {
+	console.log("Language could not be detected. Defaulting to English.");
+}
 
 function getCurrentTime() {
 	var currentTime = new Date();
+	var currentHour = currentTime.getHours();
 	var currentMinutes = currentTime.getMinutes();
 	var currentSeconds = currentTime.getSeconds();
+	var currentDay = currentTime.getDate();
+	var currentMonth = currentTime.getMonth() + 1;
+	var currentYear = currentTime.getFullYear();
+	if (currentDay < 10) {
+		currentDay = "0" + currentDay;
+	}
+	if (currentMonth < 10) {
+		currentMonth = "0" + currentMonth;
+	}
 	if (currentMinutes < 10) {
 		currentMinutes = "0" + currentMinutes;
 	}
 	if (currentSeconds < 10) {
 		currentSeconds = "0" + currentSeconds;
 	}
-	var timeNow = currentTime.getHours() + ":" + currentMinutes + ":" + currentSeconds;
+	var timeNow = currentYear + "/" + currentMonth + "/" + currentDay + " : " + currentHour + ":" + currentMinutes + ":" + currentSeconds;
 	console.log("[" + timeNow+ "]");
 };
 
 bot.on('message', message => {
-	function stopOrgie () {
+	function stopSprint () {
 		// var minutesLeft = 0;
 		clearInterval(interval);
-		message.channel.sendMessage("@here Fin de l'orgie!");
+		if (language == "fr") {
+			message.channel.sendMessage("@here Fin du sprint!");
+		} else {
+			message.channel.sendMessage("@here End of the sprint!");
+		}
 		getCurrentTime();
-		console.log("Orgie over");
-		isOrgieStarted = !isOrgieStarted;
+		console.log("Sprint over");
+		isSprintStarted = !isSprintStarted;
 	};
 	
-	function orgieNotOver() {
+	function SprintNotOver() {
 		if (minutesLeft == 0) {
-			stopOrgie();
+			stopSprint();
 		} else {
-			message.channel.sendMessage("Il reste " + minutesLeft + " minutes à l'orgie!");
+			if (language == "fr") {
+				message.channel.sendMessage("Il reste " + minutesLeft + " minutes au sprint!")
+			} else {
+				message.channel.sendMessage(minutesLeft + " minutes left to the sprint!")
+			}
 			minutesLeft = minutesLeft - 5;
 		}
 	};
 	
-	function cannotStartOrgie () {
-		message.channel.sendMessage('Une orgie est déjà en court!');
+	function cannotStartSprint () {
+		if (language == "fr") {
+			message.channel.sendMessage('Un sprint est déjà en court!');
+		} else {
+			message.channel.sendMessage("A sprint is already underway!");
+		}
 	};
 	
-	if(message.content === '!orgie 10') {
-		if (!isOrgieStarted) {
-			isOrgieStarted = !isOrgieStarted;
+	if(message.content === '!sprint 10') {
+		if (!isSprintStarted) {
+			isSprintStarted = !isSprintStarted;
 			var minutesLeft = 5;
 			getCurrentTime();
-			console.log('10 minute orgie started');
-			message.channel.sendMessage('@here Orgie de 10 minutes GO!');
+			console.log('10 minute sprint started');
+			if (language == "fr") {
+				message.channel.sendMessage('@here Sprint de 10 minutes GO!');
+			} else {
+				message.channel.sendMessage("@here 10 minute sprint GO!");
+			}
 			if (minutesLeft > -1) {
-				var interval = setInterval(orgieNotOver, 300000);
+				var interval = setInterval(sprintNotOver, 300000);
 			}
 		} else {
-			cannotStartOrgie();
+			cannotStartSprint();
 		}
 	}
 
-	if(message.content === '!orgie 15') {
-		if (!isOrgieStarted) {
-			isOrgieStarted = !isOrgieStarted;
+	if(message.content === '!sprint 15') {
+		if (!isSprintStarted) {
+			isSprintStarted = !isSprintStarted;
 			var minutesLeft = 10;
 			getCurrentTime();
-			console.log('15 minute orgie started');
-			message.channel.sendMessage('@here Orgie de 15 minutes GO!');
+			console.log('15 minute sprint started');
+			if (language == "fr") {
+				message.channel.sendMessage('@here Sprint de 15 minutes GO!');
+			} else {
+				message.channel.sendMessage("@here 15 minute sprint GO!");
+			}
 			if (minutesLeft > -1) {
-				var interval = setInterval(orgieNotOver, 300000);
+				var interval = setInterval(SprintNotOver, 300000);
 			}
 		} else {
-			cannotStartOrgie();
+			cannotStartSprint();
 		}
 	}
 	
-	if(message.content === '!orgie 20') {
-		if (!isOrgieStarted) {
-			isOrgieStarted = !isOrgieStarted;
+	if(message.content === '!sprint 20') {
+		if (!isSprintStarted) {
+			isSprintStarted = !isSprintStarted;
 			var minutesLeft = 15;
 			getCurrentTime();
-			console.log('20 minute orgie started');
-			message.channel.sendMessage('@here Orgie de 20 minutes GO!');
+			console.log('20 minute sprint started');
+			if (language == "fr") {
+				message.channel.sendMessage('@here Sprint de 20 minutes GO!');
+			} else {
+				message.channel.sendMessage("@here 20 minute sprint GO!");
+			}
 			if (minutesLeft > -1) {
-				var interval = setInterval(orgieNotOver, 300000);
+				var interval = setInterval(sprintNotOver, 300000);
 			}
 		} else {
-				cannotStartOrgie();
+				cannotStartSprint();
 		}
 	}
 	
-	if(message.content === '!orgie 30') {
-		if (!isOrgieStarted) {
-			isOrgieStarted = !isOrgieStarted;
+	if(message.content === '!sprint 30') {
+		if (!isSprintStarted) {
+			isSprintStarted = !isSprintStarted;
 			var minutesLeft = 25;
 			getCurrentTime();
-			console.log('30 minute orgie started');
-			message.channel.sendMessage('@here Orgie de 30 minutes GO!');
+			console.log('30 minute sprint started');
+			if (language == "fr") {
+				message.channel.sendMessage('@here Sprint de 30 minutes GO!');
+			} else {
+				message.channel.sendMessage("@here 30 minute sprint GO!");
+			}
 			if (minutesLeft > -1) {
-				var interval = setInterval(orgieNotOver, 300000);
+				var interval = setInterval(sprintNotOver, 300000);
 			}
 		} else {
-			cannotStartOrgie();
+			cannotStartSprint();
 		}
-	}
-	
-	function sendMessageAlt() {
-		message.channel.sendMessage("test");
 	}
 });
 
@@ -117,19 +161,44 @@ bot.on('message', message =>{
 	var mm = today.getMonth()+1;
 	if (message.content === '!wordcount') {
 		if (mm < 11) {
-			message.channel.sendMessage("NaNoWriMo n'est pas encore commencé.")
+			if (language == "fr") {
+				message.channel.sendMessage("NaNoWriMo n'est pas encore commencé.");
+			} else {
+				message.channel.sendMessage("NaNoWriMo hasn't started yet.");
+			}
 		} else if (mm > 11) {
-			message.channel.sendMessage("Novembre est fini. À l'année prochaine! :D")
+			if (language == "fr") {
+				message.channel.sendMessage("NaNoWriMo est fini. À l'année prochaine! :D");
+			} else {
+				message.channel.sendMessage("NaNoWriMo is over. See you next year! :D");
+			}
 		} else {
 			var todayWords = nanoWords [dd-1]
-			message.channel.sendMessage("Pour aujourd'hui, le wordcount à atteindre est "+todayWords+".");
+			if (language == "fr") {
+				message.channel.sendMessage("Pour aujourd'hui, le wordcount à atteindre est "+todayWords+".");
+			} else {
+				message.channel.sendMessage("The wordcount for today is "+todayWords+".");
+			}
 		}
 	}
 });
 
 bot.on('message', message =>{
 	if (message.content === 'Who da best?') {
-		message.reply('You da best!');
+		var whoDaBestRand = Math.floor(Math.random() * 100)
+		if (whoDaBestRand == 1) {
+			message.channel.sendMessage("Omlahid is da best!");
+		} else if (whoDaBestRand == 2) {
+			message.channel.sendMessage("I am. I am the best.");
+		} else {
+			message.reply('You da best!')
+		}
+	}
+});
+
+bot.on ('message', message =>{
+	if (message.content === "!cheer") {
+		message.channel.sendMessage("You can do it! https://38.media.tumblr.com/91599091501f182b0fbffab90e115895/tumblr_nq2o6lc0Kp1s7widdo1_250.gif")
 	}
 });
 
@@ -143,9 +212,16 @@ bot.on ('message', message =>{
 });
 
 bot.on('message', message =>{
-	if (message.content === '!aide') {
-		message.channel.sendMessage("Bonjour! Je m'appelle Omlabot, codé et roulé par Omlahid!\nVoici ma liste de commandes:\n`!aide`: Pour savoir ma liste de commandes.\n`!orgie 10, 15, 20 ou 30`: Pour commencer une orgie de 10, 15, 20 ou 30 minutes. \n`!wordcount`: Pour savoir il faut avoir combien de mots au total aujourd'hui\n`!prompt`: Pour recevoir un prompt d'écriture. \n`Who da best?`: To know who's the best :) \nEnjoy!");
-	}
+	if (language == "fr") {
+		if (message.content === '!aide') {
+			message.channel.sendMessage("Bonjour! Je m'appelle Omlabot!\nVoici ma liste de commandes:\n`!aide`: Pour savoir ma liste de commandes.\n`!sprint 10, 15, 20 ou 30`: Pour commencer un sprint de 10, 15, 20 ou 30 minutes. \n`!wordcount`: Pour savoir il faut avoir combien de mots au total aujourd'hui\n`!prompt`: Pour recevoir un prompt d'écriture. \n`!cheer`: To cheer you up\n`Who da best?`: To know who's the best :) \nEnjoy!");
+			}
+		}
+	if (language == "en") {
+		if (message.content === "!help") {
+			message.channel.sendMessage("Hi! My name is Omlabot!\nHere is my command list:\n`!help`: To know my command list.\n`!sprint 10, 15, 20, or 30`: To start a 10, 15, 20, or 30 minute sprint.\n`!wordcount`: To know the wordcount to achieve for today.\n`!prompt`: To get a random writing prompt.\n`!cheer`: To cheer you up\n`Who da best?`: To know who's the best :) \nEnjoy!");
+			}
+		}
 });
 
 bot.on('message', function(message){
