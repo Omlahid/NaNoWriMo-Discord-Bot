@@ -36,3 +36,17 @@ Then, you need to open the auth.json file, and enter the e-mail and password of 
 7. Run `start.bat` by double-clicking it. You should see your bot connected to your server.
 
 8. Type `!help` to know more about the current features (or type `!aide` if you changed the language to French).
+
+## Functions
+
+*`!help` or `!aide` for help.
+
+*`!sprint xx` for a sprint, where `xx` is the number of minutes the sprint should last for.
+
+*`!prompt` to get a writing prompt.
+
+*`!wordcount` to know the wordcount to get for that day.
+
+*`!cheer` to cheer someone up with a nice gif.
+
+*Other easter eggs and nice goodies :)
