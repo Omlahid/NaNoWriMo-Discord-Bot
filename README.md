@@ -21,7 +21,7 @@ Then, you need to open the auth.json file, and enter the e-mail and password of 
 
 2. Download [discord.js](https://github.com/hydrabolt/discord.js/).
     * In Windows, open the command prompt (search for CMD).
-    * Enter the following: `node install --save discord.js --production`
+    * Enter the following: `npm install --save discord.js`
 
 3. Once the download is completed, download the file from this github.
 
