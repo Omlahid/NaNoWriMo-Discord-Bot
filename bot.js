@@ -4,11 +4,19 @@ var Discord = require('discord.js');
 
 var prompts = require('./prompts.json');
 
-var bot = new Discord.Client();
+var client = new Discord.Client();
 
 var isSprintStarted = false;
 
 var language = auth.language;
+
+var token = auth.token;
+
+// The two following variables are used only for the 'Who da best?' function
+
+var currentMessageAuthorTime = 0;
+
+var currentMessageAuthor = 0;
 
 if (language == "fr") {
 	console.log("French language detected. Logs are still in English.");
@@ -18,143 +26,101 @@ if (language == "fr") {
 	console.log("Language could not be detected. Defaulting to English.");
 }
 
-function getCurrentTime() {
-	var currentTime = new Date();
-	var currentHour = currentTime.getHours();
-	var currentMinutes = currentTime.getMinutes();
-	var currentSeconds = currentTime.getSeconds();
-	var currentDay = currentTime.getDate();
-	var currentMonth = currentTime.getMonth() + 1;
-	var currentYear = currentTime.getFullYear();
-	if (currentDay < 10) {
-		currentDay = "0" + currentDay;
-	}
-	if (currentMonth < 10) {
-		currentMonth = "0" + currentMonth;
-	}
-	if (currentMinutes < 10) {
-		currentMinutes = "0" + currentMinutes;
-	}
-	if (currentSeconds < 10) {
-		currentSeconds = "0" + currentSeconds;
-	}
-	var timeNow = currentYear + "/" + currentMonth + "/" + currentDay + " : " + currentHour + ":" + currentMinutes + ":" + currentSeconds;
-	console.log("[" + timeNow+ "]");
-};
+// function to log a message in the console
+function logMessage(msg, author) {
+    var currentTime = new Date();
+    var currentHour = currentTime.getHours();
+    var currentMinutes = currentTime.getMinutes();
+    var currentSeconds = currentTime.getSeconds();
+    var currentDay = currentTime.getDate();
+    var currentMonth = currentTime.getMonth() + 1;
+    var currentYear = currentTime.getFullYear();
+    if (currentDay < 10) {
+        currentDay = "0" + currentDay;
+    }
+    if (currentMonth < 10) {
+        currentMonth = "0" + currentMonth;
+    }
+    if (currentMinutes < 10) {
+        currentMinutes = "0" + currentMinutes;
+    }
+    if (currentSeconds < 10) {
+        currentSeconds = "0" + currentSeconds;
+    }
+    var timeNow = currentYear + "/" + currentMonth + "/" + currentDay + " : " + currentHour + ":" + currentMinutes + ":" + currentSeconds;
+    console.log("[" + timeNow + "] " + author + " " + msg);
+}
 
-bot.on('message', message => {
-	function stopSprint () {
-		// var minutesLeft = 0;
-		clearInterval(interval);
-		if (language == "fr") {
-			message.channel.sendMessage("@here Fin du sprint!");
-		} else {
-			message.channel.sendMessage("@here End of the sprint!");
-		}
-		getCurrentTime();
-		console.log("Sprint over");
-		isSprintStarted = !isSprintStarted;
-	};
-	
-	function SprintNotOver() {
-		if (minutesLeft == 0) {
-			stopSprint();
-		} else {
-			if (language == "fr") {
-				message.channel.sendMessage("Il reste " + minutesLeft + " minutes au sprint!")
-			} else {
-				message.channel.sendMessage(minutesLeft + " minutes left to the sprint!")
-			}
-			minutesLeft = minutesLeft - 5;
-		}
-	};
-	
-	function cannotStartSprint () {
-		if (language == "fr") {
-			message.channel.sendMessage('Un sprint est déjà en court!');
-		} else {
-			message.channel.sendMessage("A sprint is already underway!");
-		}
-	};
-	
-	if(message.content === '!sprint 10') {
-		if (!isSprintStarted) {
-			isSprintStarted = !isSprintStarted;
-			var minutesLeft = 5;
-			getCurrentTime();
-			console.log('10 minute sprint started');
-			if (language == "fr") {
-				message.channel.sendMessage('@here Sprint de 10 minutes GO!');
-			} else {
-				message.channel.sendMessage("@here 10 minute sprint GO!");
-			}
-			if (minutesLeft > -1) {
-				var interval = setInterval(sprintNotOver, 300000);
-			}
-		} else {
-			cannotStartSprint();
-		}
-	}
+// How sprints are handled. Syntax = '!sprint' + number divisible by 5. Max is 60.
+client.on('message', message => {
 
-	if(message.content === '!sprint 15') {
-		if (!isSprintStarted) {
-			isSprintStarted = !isSprintStarted;
-			var minutesLeft = 10;
-			getCurrentTime();
-			console.log('15 minute sprint started');
-			if (language == "fr") {
-				message.channel.sendMessage('@here Sprint de 15 minutes GO!');
-			} else {
-				message.channel.sendMessage("@here 15 minute sprint GO!");
-			}
-			if (minutesLeft > -1) {
-				var interval = setInterval(SprintNotOver, 300000);
-			}
-		} else {
-			cannotStartSprint();
-		}
-	}
-	
-	if(message.content === '!sprint 20') {
-		if (!isSprintStarted) {
-			isSprintStarted = !isSprintStarted;
-			var minutesLeft = 15;
-			getCurrentTime();
-			console.log('20 minute sprint started');
-			if (language == "fr") {
-				message.channel.sendMessage('@here Sprint de 20 minutes GO!');
-			} else {
-				message.channel.sendMessage("@here 20 minute sprint GO!");
-			}
-			if (minutesLeft > -1) {
-				var interval = setInterval(sprintNotOver, 300000);
-			}
-		} else {
-				cannotStartSprint();
-		}
-	}
-	
-	if(message.content === '!sprint 30') {
-		if (!isSprintStarted) {
-			isSprintStarted = !isSprintStarted;
-			var minutesLeft = 25;
-			getCurrentTime();
-			console.log('30 minute sprint started');
-			if (language == "fr") {
-				message.channel.sendMessage('@here Sprint de 30 minutes GO!');
-			} else {
-				message.channel.sendMessage("@here 30 minute sprint GO!");
-			}
-			if (minutesLeft > -1) {
-				var interval = setInterval(sprintNotOver, 300000);
-			}
-		} else {
-			cannotStartSprint();
-		}
-	}
+    function sprintEnded() {
+        // Functions that send messages to the channel have to be declared in the message. Otherwise 'message' is not defined
+        if (language == "fr") {
+            message.channel.sendMessage("@here Fin du sprint!");
+        } else {
+            message.channel.sendMessage("@here End of the sprint!");
+        }
+        isSprintStarted = !isSprintStarted;
+        logMessage("Sprint finished", "");
+    }
+
+    function sendRemainingSprintTime(x, min) {
+        // Functions that send messages to the channel have to be declared in the message. Otherwise 'message' is not defined
+        var minutesRemainingInTotal = min - ((x - 1) * 5) // A bit of math to calculate the right amount of time left
+        setTimeout(function () {
+            if (language == "fr") {
+                message.channel.sendMessage("Il reste " + minutesRemainingInTotal + " minutes au sprint!")
+            } else {
+                message.channel.sendMessage(minutesRemainingInTotal + " minutes left to the sprint!")
+            }
+        }, x * 300000); // 5000 for seconds (testing purposes), 300000 for minutes
+    }
+
+    if (message.content.startsWith("!sprint")) {
+        if (isSprintStarted) {
+            if (language == "fr") {
+                message.channel.sendMessage('Un sprint est déjà en court!');
+            } else {
+                message.channel.sendMessage("A sprint is already underway!");
+            }
+        } else {
+            var sprintTimeDemanded = message.content.substring(8);
+            if (sprintTimeDemanded % 5 == 0) {
+                if (sprintTimeDemanded > 60) {
+                    if (language == "fr") {
+                        message.channel.sendMessage("Ce sprint est trop long (maximum d'une heure).")
+                    } else {
+                        message.channel.sendMessage("That sprint is too long (the maximum is one hour).")
+                    }
+                } else {
+                    if (language == "fr") {
+                        message.channel.sendMessage("@here Sprint de " + sprintTimeDemanded + " minutes GO!")
+                    } else {
+                        message.channel.sendMessage("@here " + sprintTimeDemanded + " minute sprint GO!")
+                    }
+                    isSprintStarted = !isSprintStarted;
+                    logMessage("asked for a " + sprintTimeDemanded + " minute sprint", message.author.username);
+                    // 60000 is for minutes, 1000 is for seconds (testing purposes)
+                    setTimeout(sprintEnded, sprintTimeDemanded * 60000)
+                    var minutesLeftToSprint = sprintTimeDemanded - 5;
+                    for (var x = 1, ln = sprintTimeDemanded / 5; x < ln; x++ , minutesLeftToSprint - 5) {
+                        sendRemainingSprintTime(x, minutesLeftToSprint);
+                    }
+                }
+            } else {
+                if (language == "fr") {
+                    message.channel.sendMessage("Les sprints se font par intervalle de 5 minutes.")
+                } else {
+                    message.channel.sendMessage("You can only ask for five minute intervals.");
+                }
+            }
+        }
+    }
 });
 
-bot.on('message', message =>{
+// Get wordcount during NaNoWriMo
+client.on('message', message =>{
 	var nanoWords = [1667, 3333, 5000, 6667, 8333, 10000, 11667, 13333, 15000, 16667, 18333, 20000, 21667, 23333, 25000, 26667, 28333, 30000, 31667, 33333, 35000, 36667, 38333, 40000, 41667, 43333, 45000, 46667, 48333, 50000];
 	var today = new Date();
 	var dd = today.getDate();
@@ -183,35 +149,52 @@ bot.on('message', message =>{
 	}
 });
 
-bot.on('message', message =>{
-	if (message.content === 'Who da best?') {
+// Who da best?
+client.on('message', message =>{
+	if (message.content.toLowerCase() == 'who da best?') {
 		var whoDaBestRand = Math.floor(Math.random() * 100)
 		if (whoDaBestRand == 1) {
 			message.channel.sendMessage("Omlahid is da best!");
 		} else if (whoDaBestRand == 2) {
 			message.channel.sendMessage("I am. I am the best.");
 		} else {
-			message.reply('You da best!')
+			var newMessageAuthor = 0;
+			newMessageAuthor = message.author.id;
+			if (currentMessageAuthor != newMessageAuthor) {
+				currentMessageAuthor = newMessageAuthor;
+				currentMessageAuthorTime *= 0;
+			} else {
+				currentMessageAuthorTime++;
+			}
+			if (currentMessageAuthorTime > 1) {
+				message.reply("Stop asking me who the best one is! :angry:");
+			} else {
+				message.reply('You da best!')
+			}
 		}
 	}
 });
 
-bot.on ('message', message =>{
+// Cheer! :cheer:
+client.on ('message', message =>{
 	if (message.content === "!cheer") {
 		message.channel.sendMessage("You can do it! https://38.media.tumblr.com/91599091501f182b0fbffab90e115895/tumblr_nq2o6lc0Kp1s7widdo1_250.gif")
 	}
 });
 
-bot.on ('message', message =>{
+// Prompts
+client.on ('message', message =>{
 	if (message.content === "!prompt") {
 		var themes = prompts.writingPrompts;
 		var randomNumberRaw = Math.floor(Math.random() * (themes.length) - 1);
 		var thisPrompt = themes [randomNumberRaw];
 		message.channel.sendMessage('Your prompt is "' + thisPrompt +'"');
+        logMessage(" received prompt number " + randomNumberRaw, message.author.username)
 	}
 });
 
-bot.on('message', message =>{
+// !help or !aide
+client.on('message', message =>{
 	if (language == "fr") {
 		if (message.content === '!aide') {
 			message.channel.sendMessage("Bonjour! Je m'appelle Omlabot!\nVoici ma liste de commandes:\n`!aide`: Pour savoir ma liste de commandes.\n`!sprint 10, 15, 20 ou 30`: Pour commencer un sprint de 10, 15, 20 ou 30 minutes. \n`!wordcount`: Pour savoir il faut avoir combien de mots au total aujourd'hui\n`!prompt`: Pour recevoir un prompt d'écriture. \n`!cheer`: To cheer you up\n`Who da best?`: To know who's the best :) \nEnjoy!");
@@ -224,19 +207,20 @@ bot.on('message', message =>{
 		}
 });
 
-bot.on('message', function(message){
-	if (message.content.includes("pokemon")) {
-		getCurrentTime();
-		console.log("Someone talked about Pokemon");
-	}
-});
+// Pokemon
+client.on('message', message => {
+    if (message.content.includes("pokemon")){
+        logMessage(" mentionned pokemon", message.author.username);
+    }
+})
 
-bot.on('message', message =>{
+// Glow Cloud
+client.on('message', message =>{
 	if (message.content.includes("glow cloud")) {
 		message.channel.sendMessage("All Hail the Glow Cloud");
-		getCurrentTime();
-		console.log("All Hail the Glow Cloud");
+        logMessage("All Hail the Glow Cloud", "");
 	}
 });
 
-bot.login(auth.email, auth.password);
+// Client token, required for the bot to work
+client.login(token);
