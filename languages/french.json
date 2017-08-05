@@ -1,0 +1,19 @@
+{
+    "consoleLanguage" : "French language detected. Logs are still in English.",
+    "sprintEnd": "@here Fin du sprint!",
+    "remainingSprintTime": "Il reste ",
+    "remainingSprintTime2": " minutes au sprint!",
+    "sprintAlreadyStarted": "Un sprint est déjà en court!",
+    "sprintTooLong": "Ce sprint est trop long (maximum d'une heure).",
+    "startSprint": "@here Sprint de ",
+    "startSprint2": " minutes GO!",
+    "sprintIntervalLength": "Les sprints se font par intervalle de 5 minutes.",
+    "NanoNotStartedYet": "NaNoWriMo n'est pas encore commencé.",
+    "NanoOver": "NaNoWriMo est fini. À l'année prochaine! :D",
+    "todayWordcount": "Pour aujourd'hui, le wordcount à atteindre est ",
+    "cheeringMessage": "Tu peux le faire! https://38.media.tumblr.com/91599091501f182b0fbffab90e115895/tumblr_nq2o6lc0Kp1s7widdo1_250.gif",
+    "showPrompt": "Ton prompt d'écriture est : ",
+    "whoDaBest": "You da best!",
+    "stopWhoDaBest": "Arrête de me le demander! :angry:",
+    "helpMessage": "Bonjour! Je m'appelle Omlabot!\nVoici ma liste de commandes:\n`!aide`: Pour savoir ma liste de commandes.\n`!sprint 10, 15, 20 ou 30`: Pour commencer un sprint de 10, 15, 20 ou 30 minutes. \n`!wordcount`: Pour savoir il faut avoir combien de mots au total aujourd'hui\n`!prompt`: Pour recevoir un prompt d'écriture. \n`!cheer`: To cheer you up\n`Who da best?`: To know who's the best :) \nEnjoy!"
+}

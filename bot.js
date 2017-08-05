@@ -10,6 +10,23 @@ var isSprintStarted = false;
 
 var language = auth.language;
 
+if (language.endsWith(".json")) {
+    language = language.substring(0, str.length - 5);
+}
+
+try {
+    var lang = require('./languages/' + language.toLowerCase() +'.json');
+}
+catch(e) {
+    try {
+        var lang = require('./english.json')
+        console.log('ERROR: The language could not be detected. Ensure your json file name has the same name as your language declared in auth.json.\nLoading English language by default.')
+    }
+    catch(e) {
+        console.log('ERROR: You have deleted the english.json file. Download it from https://github.com/Omlahid/NaNoWriMo-Discord-Bot, and ensure it is in the same folder as bot.js.')
+    }
+}
+
 var token = auth.token;
 
 // The two following variables are used only for the 'Who da best?' function
@@ -18,13 +35,7 @@ var currentMessageAuthorTime = 0;
 
 var currentMessageAuthor = 0;
 
-if (language == "fr") {
-	console.log("French language detected. Logs are still in English.");
-} else if (language == "en") {
-	console.log("English language detected.");
-} else {
-	console.log("Language could not be detected. Defaulting to English.");
-}
+console.log(lang.consoleLanguage);
 
 // function to log a message in the console
 function logMessage(msg, author) {
@@ -56,11 +67,7 @@ client.on('message', message => {
 
     function sprintEnded() {
         // Functions that send messages to the channel have to be declared in the message. Otherwise 'message' is not defined
-        if (language == "fr") {
-            message.channel.sendMessage("@here Fin du sprint!");
-        } else {
-            message.channel.sendMessage("@here End of the sprint!");
-        }
+        message.channel.sendMessage(lang.sprintEnd);
         isSprintStarted = !isSprintStarted;
         logMessage("Sprint finished", "");
     }
@@ -69,51 +76,30 @@ client.on('message', message => {
         // Functions that send messages to the channel have to be declared in the message. Otherwise 'message' is not defined
         var minutesRemainingInTotal = min - ((x - 1) * 5) // A bit of math to calculate the right amount of time left
         setTimeout(function () {
-            if (language == "fr") {
-                message.channel.sendMessage("Il reste " + minutesRemainingInTotal + " minutes au sprint!")
-            } else {
-                message.channel.sendMessage(minutesRemainingInTotal + " minutes left to the sprint!")
-            }
+            message.channel.sendMessage(lang.remainingSprintTime + minutesRemainingInTotal + lang.remainingSprintTime2);
         }, x * 300000); // 5000 for seconds (testing purposes), 300000 for minutes
     }
 
     if (message.content.startsWith("!sprint")) {
         if (isSprintStarted) {
-            if (language == "fr") {
-                message.channel.sendMessage('Un sprint est déjà en court!');
-            } else {
-                message.channel.sendMessage("A sprint is already underway!");
-            }
+            message.channel.sendMessage(lang.sprintAlreadyStarted);
         } else {
             var sprintTimeDemanded = message.content.substring(8);
             if (sprintTimeDemanded % 5 == 0) {
                 if (sprintTimeDemanded > 60) {
-                    if (language == "fr") {
-                        message.channel.sendMessage("Ce sprint est trop long (maximum d'une heure).")
-                    } else {
-                        message.channel.sendMessage("That sprint is too long (the maximum is one hour).")
-                    }
+                    message.channel.sendMessage(lang.sprintTooLong);
                 } else {
-                    if (language == "fr") {
-                        message.channel.sendMessage("@here Sprint de " + sprintTimeDemanded + " minutes GO!")
-                    } else {
-                        message.channel.sendMessage("@here " + sprintTimeDemanded + " minute sprint GO!")
-                    }
+                    message.channel.sendMessage(lang.startSprint + sprintTimeDemanded + lang.startSprint2);
                     isSprintStarted = !isSprintStarted;
                     logMessage("asked for a " + sprintTimeDemanded + " minute sprint", message.author.username);
-                    // 60000 is for minutes, 1000 is for seconds (testing purposes)
-                    setTimeout(sprintEnded, sprintTimeDemanded * 60000)
+                    setTimeout(sprintEnded, sprintTimeDemanded * 60000) // 60000 is for minutes, 1000 is for seconds (testing purposes)
                     var minutesLeftToSprint = sprintTimeDemanded - 5;
                     for (var x = 1, ln = sprintTimeDemanded / 5; x < ln; x++ , minutesLeftToSprint - 5) {
                         sendRemainingSprintTime(x, minutesLeftToSprint);
                     }
                 }
             } else {
-                if (language == "fr") {
-                    message.channel.sendMessage("Les sprints se font par intervalle de 5 minutes.")
-                } else {
-                    message.channel.sendMessage("You can only ask for five minute intervals.");
-                }
+                message.channel.sendMessage(lang.sprintIntervalLength)
             }
         }
     }
@@ -127,24 +113,12 @@ client.on('message', message =>{
 	var mm = today.getMonth()+1;
 	if (message.content === '!wordcount') {
 		if (mm < 11) {
-			if (language == "fr") {
-				message.channel.sendMessage("NaNoWriMo n'est pas encore commencé.");
-			} else {
-				message.channel.sendMessage("NaNoWriMo hasn't started yet.");
-			}
+            message.channel.sendMessage(lang.NanoNotStartedYet);
 		} else if (mm > 11) {
-			if (language == "fr") {
-				message.channel.sendMessage("NaNoWriMo est fini. À l'année prochaine! :D");
-			} else {
-				message.channel.sendMessage("NaNoWriMo is over. See you next year! :D");
-			}
+            message.channel.sendMessage(lang.NanoOver);
 		} else {
 			var todayWords = nanoWords [dd-1]
-			if (language == "fr") {
-				message.channel.sendMessage("Pour aujourd'hui, le wordcount à atteindre est "+todayWords+".");
-			} else {
-				message.channel.sendMessage("The wordcount for today is "+todayWords+".");
-			}
+            message.channel.sendMessage(lang.todayWordcount + todayWords + ".");
 		}
 	}
 });
@@ -167,9 +141,9 @@ client.on('message', message =>{
 				currentMessageAuthorTime++;
 			}
 			if (currentMessageAuthorTime > 1) {
-				message.reply("Stop asking me who the best one is! :angry:");
+                message.reply(lang.stopWhoDaBest);
 			} else {
-				message.reply('You da best!')
+                message.reply(lang.whoDaBest)
 			}
 		}
 	}
@@ -178,7 +152,7 @@ client.on('message', message =>{
 // Cheer! :cheer:
 client.on ('message', message =>{
 	if (message.content === "!cheer") {
-		message.channel.sendMessage("You can do it! https://38.media.tumblr.com/91599091501f182b0fbffab90e115895/tumblr_nq2o6lc0Kp1s7widdo1_250.gif")
+        message.channel.sendMessage(lang.cheeringMessage);
 	}
 });
 
@@ -188,23 +162,15 @@ client.on ('message', message =>{
 		var themes = prompts.writingPrompts;
 		var randomNumberRaw = Math.floor(Math.random() * (themes.length) - 1);
 		var thisPrompt = themes [randomNumberRaw];
-		message.channel.sendMessage('Your prompt is "' + thisPrompt +'"');
+        message.channel.sendMessage(lang.showPrompt + thisPrompt +"\".");
         logMessage(" received prompt number " + randomNumberRaw, message.author.username)
 	}
 });
 
 // !help or !aide
 client.on('message', message =>{
-	if (language == "fr") {
-		if (message.content === '!aide') {
-			message.channel.sendMessage("Bonjour! Je m'appelle Omlabot!\nVoici ma liste de commandes:\n`!aide`: Pour savoir ma liste de commandes.\n`!sprint 10, 15, 20 ou 30`: Pour commencer un sprint de 10, 15, 20 ou 30 minutes. \n`!wordcount`: Pour savoir il faut avoir combien de mots au total aujourd'hui\n`!prompt`: Pour recevoir un prompt d'écriture. \n`!cheer`: To cheer you up\n`Who da best?`: To know who's the best :) \nEnjoy!");
-			}
-		}
-	if (language == "en") {
-		if (message.content === "!help") {
-			message.channel.sendMessage("Hi! My name is Omlabot!\nHere is my command list:\n`!help`: To know my command list.\n`!sprint 10, 15, 20, or 30`: To start a 10, 15, 20, or 30 minute sprint.\n`!wordcount`: To know the wordcount to achieve for today.\n`!prompt`: To get a random writing prompt.\n`!cheer`: To cheer you up\n`Who da best?`: To know who's the best :) \nEnjoy!");
-			}
-		}
+    if (message.content == "!aide" || message.content == "!help")
+    message.channel.sendMessage(lang.helpMessage);
 });
 
 // Pokemon
@@ -223,4 +189,9 @@ client.on('message', message =>{
 });
 
 // Client token, required for the bot to work
-client.login(token);
+try {
+    client.login(token);
+}
+catch(e) {
+    console.log("ERROR: No account was linked to your bot. Please provide a valid authentication token. You can change it in the auth.json file.")
+}

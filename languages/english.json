@@ -1,0 +1,19 @@
+{
+    "consoleLanguage" : "English language detected.",
+    "sprintEnd": "@here End of the sprint!",
+    "remainingSprintTime": "Only ",
+    "remainingSprintTime2": " minutes left to the sprint!",
+    "sprintAlreadyStarted": "A sprint is already underway!",
+    "sprintTooLong": "That sprint is too long (the maximum is one hour).",
+    "startSprint": "@here ",
+    "startSprint2": " minute sprint GO!",
+    "sprintIntervalLength": "You can only ask for five minute intervals.",
+    "NanoNotStartedYet": "NaNoWriMo hasn't started yet.",
+    "NanoOver": "NaNoWriMo is over. See you next year! :D",
+    "todayWordcount": "The wordcount for today is ",
+    "cheeringMessage": "You can do it! https://38.media.tumblr.com/91599091501f182b0fbffab90e115895/tumblr_nq2o6lc0Kp1s7widdo1_250.gif",
+    "showPrompt": "Your prompt is: ",
+    "whoDaBest": "You da best!",
+    "stopWhoDaBest": "Stop asking me who is the best! :angry:",
+    "helpMessage": "Hi! My name is Omlabot!\nHere is my command list:\n`!help`: To know my command list.\n`!sprint 10, 15, 20, or 30`: To start a 10, 15, 20, or 30 minute sprint.\n`!wordcount`: To know the wordcount to achieve for today.\n`!prompt`: To get a random writing prompt.\n`!cheer`: To cheer you up\n`Who da best?`: To know who's the best :) \nEnjoy!"
+}

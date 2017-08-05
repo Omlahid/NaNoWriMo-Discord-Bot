@@ -1,15 +1,16 @@
 # NaNoWriMo-Discord-Bot
-**WARNING THIS BOT IS STILL IN EARLY ALPHA. THERE IS NO COMMENT IN THE CODE, AND THERE MIGHT BE SOME BUGS LEFT. THE CREATOR IS STILL ACTIVELY WORKING ON IT 2016/10/11**
 
-This bot (Omlabot) is a small bot I've created. It uses the discord.js library, and is deployed through node.js.
+This bot (Omlabot) uses the discord.js library, and is deployed through node.js.
 
-As of 2016/12/10, the bot supports French and English messages. Edit the `auth.json` to change the language.
+The bot comes with English and French support out-of-the-box. Edit the `auth.json` to change the language.
+
+You can also add different language. Scroll down for more information.
 
 ## I-Know-What-I'm-Doing Documentation
 
 For this bot to work, you need to have node.js 6.0.0+ installed. This is to download [discord.js](https://github.com/hydrabolt/discord.js/), which is required to run this bot.
 
-Then, you need to open the auth.json file, and enter the e-mail and password of the account that will serve as your bot. You then simply need to run `start.bat`.
+Then, you need to open the auth.json file, and enter the token of the account that will serve as your bot. You then simply need to run `start.bat`.
 
 ## I-Have-Never-Done-Anything-Like-This-Before Documentation
 
@@ -27,9 +28,19 @@ Then, you need to open the auth.json file, and enter the e-mail and password of 
 
 4. Open the `auth.json` file. You can simply use notepad for this, or the better version [notepad++](https://notepad-plus-plus.org/download/v7.html).
 
-5. Change the e-mail and the password to an account you created for your bot (recommended).
+5. Enter the token for your bot. This is a bit tricky, especially since the Discord documentation is not entirely clear, so closely follow these steps.
 
-    You can also enter your own information, in which case you will act as the bot.
+    **WARNING: Never share your token with anyone. It is sensitive information and should be treated with the same responsibility as a password to your account.**
+
+    a. Log in to your bot account in a browser, and open the console (press `F12` or `Cmd/Ctrl` + `Shift` +`I`).
+
+    b. Select the **Application** tab at the top of the console.
+
+    c. In the tab, expend **Local Storage**, and select `https://discordapp.com`.
+
+    d. You should see a token on the right. Copy paste it in your `auth.json`.
+
+    **WARNING: Never, ever share this token or this file to anyone. The token is essentially an ID card that bypasses the username/password system, and assumes you are already authenticated.**
 
 6. Save the file.
 
@@ -39,14 +50,38 @@ Then, you need to open the auth.json file, and enter the e-mail and password of 
 
 ## Functions
 
-*`!help` or `!aide` for help.
+* `!help` or `!aide` for help.
 
-*`!sprint xx` for a sprint, where `xx` is the number of minutes the sprint should last for.
+* `!sprint xx` for a sprint, where `xx` is the number of minutes the sprint should last for.
 
-*`!prompt` to get a writing prompt.
+* `!prompt` to get a writing prompt.
 
-*`!wordcount` to know the wordcount to get for that day.
+* `!wordcount` to know the wordcount to get for that day.
 
-*`!cheer` to cheer someone up with a nice gif.
+* `!cheer` to cheer someone up with a nice gif.
 
-*Other easter eggs and nice goodies :)
+* Other easter eggs and nice goodies :)
+
+## Changing the Bot Language
+
+Omlabot comes with French and English support out-of-the-box. To switch between them, open the `auth.json` file, and enter `english` or `french`, depending on the language you prefer.
+
+To add a new language and use it for your bot:
+
+1. In the `languages` file, duplicate the `english.json` file.
+
+2. Rename the copy of your file to `yournewlanguage.json`. Ensure the name is in lowercase.
+
+    For instance, if you wanted to add Polish support, your file should be called `polish.json`.
+
+3. Open your new language file with your favoured editor.
+
+4. Translate the second part of each line. A single message might be separated in two different messages, so keep this in mind when translating.
+
+5. Save the file.
+
+6. In the `auth.json` file, replace `english` (or whichever language you decided to use previously) to the name of your new language file.
+
+    For instance, if you have created a `polish.json` file, you would need to enter `polish`.
+
+7. Save the file.
