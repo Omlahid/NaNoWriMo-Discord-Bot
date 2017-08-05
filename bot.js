@@ -19,7 +19,7 @@ try {
 }
 catch(e) {
     try {
-        var lang = require('./english.json')
+        var lang = require('./languages/english.json')
         console.log('ERROR: The language could not be detected. Ensure your json file name has the same name as your language declared in auth.json.\nLoading English language by default.')
     }
     catch(e) {

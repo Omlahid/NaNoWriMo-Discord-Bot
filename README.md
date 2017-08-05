@@ -21,10 +21,13 @@ Then, you need to open the auth.json file, and enter the token of the account th
     You need this to download discord.js and also to run the bot itself, although you might not realize it.
 
 2. Download [discord.js](https://github.com/hydrabolt/discord.js/).
-    * In Windows, open the command prompt (search for CMD).
-    * Enter the following: `npm install --save discord.js`
+    a. In Windows, open the command prompt (search for CMD).
 
-3. Once the download is completed, download the file from this github.
+    b. Enter the following: `npm install --save discord.js`
+
+    While the download may seem to fail due to WARN errors, it should still have completed successfully.
+
+3. Once the download is completed, download the files from this GitHub project.
 
 4. Open the `auth.json` file. You can simply use notepad for this, or the better version [notepad++](https://notepad-plus-plus.org/download/v7.html).
 
@@ -36,7 +39,7 @@ Then, you need to open the auth.json file, and enter the token of the account th
 
     b. Select the **Application** tab at the top of the console.
 
-    c. In the tab, expend **Local Storage**, and select `https://discordapp.com`.
+    c. In the tab, expand **Local Storage**, and select `https://discordapp.com`.
 
     d. You should see a token on the right. Copy paste it in your `auth.json`.
 
@@ -85,3 +88,9 @@ To add a new language and use it for your bot:
     For instance, if you have created a `polish.json` file, you would need to enter `polish`.
 
 7. Save the file.
+
+## Adding or Removing Prompts
+
+The `!prompt` command gives you a random prompt to help you kickstart your writing project. All of the prompts are in the `prompts.json` file.
+
+To add or remove more prompts, simply open the `prompts.json` file in your favoured editor, and add or remove what you want.
