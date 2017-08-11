@@ -15,5 +15,5 @@
     "showPrompt": "Your prompt is: ",
     "whoDaBest": "You da best!",
     "stopWhoDaBest": "Stop asking me who is the best! :angry:",
-    "helpMessage": "Hi! My name is Omlabot!\nHere is my command list:\n`!help`: To know my command list.\n`!sprint 10, 15, 20, or 30`: To start a 10, 15, 20, or 30 minute sprint.\n`!wordcount`: To know the wordcount to achieve for today.\n`!prompt`: To get a random writing prompt.\n`!cheer`: To cheer you up\n`Who da best?`: To know who's the best :) \nEnjoy!"
+    "helpMessage": "Hi! My name is Omlabot!\nHere is my command list:\n`!help`: To know my command list.\n`!sprint xx`: To start a sprint, where `xx` is the sprint lenght in minutes.\n`!wordcount`: To know the wordcount to achieve for today.\n`!prompt`: To get a random writing prompt.\n`!cheer`: To cheer you up\n`Who da best?`: To know who's the best :) \nEnjoy!"
 }
