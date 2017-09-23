@@ -21,11 +21,14 @@ Then, you need to open the auth.json file, and enter the token of the account th
     You need this to download discord.js and also to run the bot itself, although you might not realize it.
 
 2. Download [discord.js](https://github.com/hydrabolt/discord.js/).
+
     a. In Windows, open the command prompt (search for CMD).
 
     b. Enter the following: `npm install --save discord.js`
 
     While the download may seem to fail due to WARN errors, it should still have completed successfully.
+
+    c. After the previous download finishes, enter the following: `npm install xml2js`
 
 3. Once the download is completed, download the files from this GitHub project.
 
@@ -53,11 +56,15 @@ Then, you need to open the auth.json file, and enter the token of the account th
 
 ## Functions
 
-* `!help` or `!aide` for help.
+* `!help` for help on the bot's usage.
 
 * `!sprint xx` for a sprint, where `xx` is the number of minutes the sprint should last for.
 
 * `!prompt` to get a writing prompt.
+
+* `!my words` to know how many words you have entered on the NaNoWriMo website.
+
+* `!words xx` to know someone else's wordcount (where xx is their NaNoWriMo username).
 
 * `!wordcount` to know the wordcount to get for that day.
 
@@ -83,11 +90,21 @@ To add a new language and use it for your bot:
 
 5. Save the file.
 
-6. In the `auth.json` file, replace `english` (or whichever language you decided to use previously) to the name of your new language file.
+6. In the `languages` > `commands` file, duplicate the `english.json` file.
+
+7. Rename the copy of your file the same name as your previously created file.
+
+8. Open your new language file with your favoured editor.
+
+9. Translate the second part of each line. A single message might be separated in two different messages, so keep this in mind when translating.
+
+10. Save the file.
+
+11. In the `auth.json` file, replace `english` (or whichever language you decided to use previously) to the name of your new language file.
 
     For instance, if you have created a `polish.json` file, you would need to enter `polish`.
 
-7. Save the file.
+12. Save the file.
 
 ## Adding or Removing Prompts
 
