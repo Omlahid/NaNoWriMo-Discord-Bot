@@ -1,0 +1,5 @@
+{
+    "token": "",
+    "debug": false,
+    "superadminid": "Enter the Discord User Id of a user that should be considered this bot's admin on all servers."
+  }
