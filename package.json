@@ -1,0 +1,13 @@
+{
+  "name": "NaNoWriMo-Discord-Bot",
+  "version": "1.0.0",
+  "description": "NaNoWriMo-Discord-Bot",
+  "main": "bot.js",
+  "repository": "git@github.com:Omlahid/NaNoWriMo-Discord-Bot.git",
+  "author": "https://github.com/Omlahid",
+  "license": "MIT",
+  "private": false,
+  "devDependencies": {
+    "jest": "^23.6.0"
+  }
+}
