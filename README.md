@@ -26,7 +26,8 @@ The bot supports being on different servers at the same time, even running on di
 
 ## I-Know-What-I'm-Doing Documentation
 
-For this bot to work, you need to have node.js 6.0.0+ installed. This is to download [discord.js](https://github.com/hydrabolt/discord.js/), which is required to run this bot.
+For this bot to work, you need to have node.js 6.0.0+ installed. This is to install the dependencies
+and run the bot.
 
 Then, you need to open the `globalSettings.json` file, and enter the token of the account that will serve as your bot. You then simply need to run `start.bat`.
 
@@ -36,19 +37,18 @@ Then, you need to open the `globalSettings.json` file, and enter the token of th
 
 1. Download [node.js](https://nodejs.org/en/). You need at least version 6.0.0, so use the most recent.
 
-    You need this to download discord.js and also to run the bot itself, although you might not realize it.
+    You need this to install the dependencies and also to run the bot itself, although you might not realize it.
 
-2. Download [discord.js](https://github.com/hydrabolt/discord.js/).
+2. Download the files from this GitHub project.
+
+3. Install dependencies
 
     a. In Windows, open the command prompt (search for CMD).
 
-    b. Enter the following: `npm install --save discord.js`
+    b. Enter the following: `npm install -g yarn`
 
-    While the download may seem to fail due to WARN errors, it should still have completed successfully.
+    c. Enter the following: `yarn`
 
-    c. After the previous download finishes, enter the following: `npm install xml2js`
-
-3. Once the download is completed, download the files from this GitHub project.
 
 4. Open the `globalSettings.json` file. You can simply use notepad for this, or the better version [notepad++](https://notepad-plus-plus.org/download/v7.html).
 
