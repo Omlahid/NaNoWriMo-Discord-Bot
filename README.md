@@ -41,13 +41,13 @@ Then, you need to open the `globalSettings.json` file, and enter the token of th
 
 2. Download the files from this GitHub project.
 
-3. Install dependencies
+3. Install the dependencies needed for this bot to run.
 
     a. In Windows, open the command prompt (search for CMD).
 
-    b. Enter the following: `npm install -g yarn`
+    b. In the command prompt window, enter npm install -g yarn, and press enter.
 
-    c. Enter the following: `yarn`
+    c. Once the previous download has finished, enter yarn, and press enter.
 
 
 4. Open the `globalSettings.json` file. You can simply use notepad for this, or the better version [notepad++](https://notepad-plus-plus.org/download/v7.html).
