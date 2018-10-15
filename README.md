@@ -43,14 +43,14 @@ Then, you need to open the `globalSettings.json` file, and enter the token of th
 
 3. Install the dependencies needed for this bot to run.
 
-    a. In Windows, open the command prompt (search for CMD).
+    a. In Windows, open the command prompt in the folder of the downloaded files (see [Ways to open Command Prompt in a folder in Windows](https://www.thewindowsclub.com/how-to-open-command-prompt-from-right-click-menu)).
 
-    b. In the command prompt window, enter npm install -g yarn, and press enter.
+    b. In the command prompt window, enter `npm install -g yarn`, and press enter.
 
-    c. Once the previous download has finished, enter yarn, and press enter.
+    c. Once the previous download has finished, enter `yarn`, and press enter.
 
 
-4. Open the `globalSettings.json` file. You can simply use notepad for this, or the better version [notepad++](https://notepad-plus-plus.org/download/v7.html).
+4. Open the `globalSettings.json` file. You can simply use notepad for this, or the better version [notepad++](https://notepad-plus-plus.org/download/).
 
 5. Enter the token for your bot. This is a bit tricky, especially since the Discord documentation is not entirely clear, so closely follow these steps.
 
