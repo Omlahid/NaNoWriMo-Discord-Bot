@@ -2,10 +2,12 @@ const fs = require('fs');
 const https = require('https');
 const parseString = require('xml2js').parseString;
 const Discord = require('discord.js');
+
 const globalSettings = require('./globalSettings.json');
 const prompts = require('./prompts.json');
 const userDb = require('./users/users.json');
 const serverSettings = require('./serverSettings.json');
+const isUserAdmin = require('./src/isUserAdmin');
 
 // Merge all languages
 let lang = {};
@@ -103,23 +105,6 @@ function getNaNoWordcount(user) {
     });
 }
 
-function isUserAdmin(member) {
-    if (member != null) {
-        let userRoles = [];
-        let roles = member.roles.array();
-        roles.forEach(role => {
-            userRoles.push(role.permissions.toString(2));
-        });
-        if(userRoles.some(function(e){return e.charAt(e.length-4)=='1'}) || member.user.id == globalSettings.superadminid){
-            return true;
-        } else {
-            return false;
-        }
-    } else {
-        return true;
-    }
-}
-
 client.on('message', message => {
 
     function sprintEnded() {
@@ -173,7 +158,7 @@ client.on('message', message => {
                 guildprop = {
                     "id": message.channel.id,
                     "name": message.channel.name
-                } 
+                }
             } else {
                 // When the message is a group DM, but no name was set for this group
                 let dmNames = message.channel.recipients.nicks.array();
@@ -193,7 +178,7 @@ client.on('message', message => {
     }
 
     if (!sprint[guildprop.id]) {
-        sprint[guildprop.id] = {"isSprintStarted": false};
+        sprint[guildprop.id] = { "isSprintStarted": false };
     }
 
     // Register users
@@ -322,7 +307,7 @@ client.on('message', message => {
 
     // Give users someone else's wordcount
     if (message.content.toLowerCase().startsWith(commands[messageLanguage].words)) {
-        if(message.content.includes("<@")) {
+        if (message.content.includes("<@")) {
             const saneMessage = message.content.replaceAll("!", "");
             const id = saneMessage.substring(saneMessage.indexOf("@") + 1, saneMessage.indexOf(">"));
             try {
@@ -349,7 +334,7 @@ client.on('message', message => {
             catch (e) {
                 message.channel.send(lang[messageLanguage].usernameInvalid);
             }
-        }else{
+        } else {
             let properUser = message.content.substring(commands[messageLanguage].words.length + 1);
             let username = properUser.toLowerCase().replaceAll(" ", "-");
             getNaNoWordcount(username).then(e => {
@@ -373,13 +358,13 @@ client.on('message', message => {
         }
     }
 
-    if(message.content.startsWith("!language") && isUserAdmin(message.member)) {
+    if (message.content.startsWith("!language") && isUserAdmin(message.member)) {
         let id = guildprop.id;
         let enteredCommand = message.content.split(" ");
         let newServerLanguage = enteredCommand[1].toLowerCase();
 
-        if(serverSettings[id]) {
-            if(lang[newServerLanguage]) {
+        if (serverSettings[id]) {
+            if (lang[newServerLanguage]) {
                 serverSettings[id].language = newServerLanguage;
                 try {
                     fs.writeFile('serverSettings.json', JSON.stringify(serverSettings));
