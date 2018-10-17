@@ -4,10 +4,11 @@ const parseString = require('xml2js').parseString;
 const Discord = require('discord.js');
 
 const globalSettings = require('./globalSettings.json');
-const prompts = require('./prompts.json');
 const userDb = require('./users/users.json');
 const serverSettings = require('./serverSettings.json');
 const isUserAdmin = require('./src/isUserAdmin');
+const getPrompt = require('./src/getPrompt');
+const logMessage = require('./src/logMessage');
 
 // Merge all languages
 let lang = {};
@@ -36,31 +37,6 @@ client.on('ready', () => {
 });
 
 var sprint = {};
-
-// function to log a message in the console
-function logMessage(msg, author, server) {
-    var currentTime = new Date();
-    var currentHour = currentTime.getHours();
-    var currentMinutes = currentTime.getMinutes();
-    var currentSeconds = currentTime.getSeconds();
-    var currentDay = currentTime.getDate();
-    var currentMonth = currentTime.getMonth() + 1;
-    var currentYear = currentTime.getFullYear();
-    if (currentDay < 10) {
-        currentDay = "0" + currentDay;
-    }
-    if (currentMonth < 10) {
-        currentMonth = "0" + currentMonth;
-    }
-    if (currentMinutes < 10) {
-        currentMinutes = "0" + currentMinutes;
-    }
-    if (currentSeconds < 10) {
-        currentSeconds = "0" + currentSeconds;
-    }
-    var timeNow = currentYear + "/" + currentMonth + "/" + currentDay + " : " + currentHour + ":" + currentMinutes + ":" + currentSeconds;
-    console.log("[" + timeNow + "] " + "[" + server + "] " + author + " " + msg);
-}
 
 function addUserToDb(id, user, house) {
     let newUser = {
@@ -282,11 +258,9 @@ client.on('message', message => {
 
     // Prompts
     if (message.content == commands[messageLanguage].prompt) {
-        var themes = prompts.writingPrompts;
-        var randomNumberRaw = Math.floor(Math.random() * (themes.length) - 1);
-        var thisPrompt = themes[randomNumberRaw];
-        message.channel.send(lang[messageLanguage].showPrompt + thisPrompt);
-        logMessage("received prompt number " + randomNumberRaw, message.author.username, guildprop.name)
+        let currentPrompt = getPrompt();
+        message.channel.send(lang[messageLanguage].showPrompt + currentPrompt);
+        logMessage("received prompt: " + currentPrompt, message.author.username, guildprop.name)
     }
 
     // !help
