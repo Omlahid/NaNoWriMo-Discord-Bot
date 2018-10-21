@@ -1,6 +1,4 @@
 const fs = require('fs');
-const https = require('https');
-const parseString = require('xml2js').parseString;
 const Discord = require('discord.js');
 
 const globalSettings = require('./globalSettings.json');
@@ -9,6 +7,7 @@ const serverSettings = require('./serverSettings.json');
 const isUserAdmin = require('./src/isUserAdmin');
 const getPrompt = require('./src/getPrompt');
 const logMessage = require('./src/logMessage');
+const getNaNoWordcount = require('./src/getNaNoWordcount');
 
 // Merge all languages
 let lang = {};
@@ -18,7 +17,7 @@ commands.english = require('./languages/commands/english.json');
 lang.french = require('./languages/french.json');
 commands.french = require('./languages/commands/french.json');
 
-var minuteLength = 60;
+let minuteLength = 60;
 if (globalSettings.debug) {
     minuteLength = 1;
 }
@@ -52,33 +51,6 @@ function addUserToDb(id, user, house) {
         console.log("An error occurred while trying to save the user in the JSON:");
         console.log(e);
     }
-}
-
-function getNaNoWordcount(user) {
-    return new Promise(function (resolve, reject) {
-        urlToCall = "https://nanowrimo.org/wordcount_api/wc/" + user
-        let req = https.request(urlToCall, res => {
-            if (globalSettings.debug) {
-                console.log('statusCode:', res.statusCode);
-            }
-            res.on('data', (d) => {
-                parseString(d, function (err, result) {
-                    if (result.wc.user_wordcount != null) {
-                        resolve(result.wc.user_wordcount);
-                    } else if (result.wc.error == "user does not exist") {
-                        resolve("userNoExist");
-                    } else if (result.wc.error == "user does not have a current novel") {
-                        resolve("userNoNovel");
-                    }
-                })
-            });
-        });
-        req.on('error', (e) => {
-            console.error("Error while fetching the user wordcount :" + e);
-            reject("somethingWentWrong");
-        });
-        req.end();
-    });
 }
 
 client.on('message', message => {
