@@ -1,13 +1,13 @@
 const fs = require('fs');
-const https = require('https');
-const parseString = require('xml2js').parseString;
 const Discord = require('discord.js');
 
 const globalSettings = require('./globalSettings.json');
-const prompts = require('./prompts.json');
 const userDb = require('./users/users.json');
 const serverSettings = require('./serverSettings.json');
 const isUserAdmin = require('./src/isUserAdmin');
+const getPrompt = require('./src/getPrompt');
+const logMessage = require('./src/logMessage');
+const getNaNoWordcount = require('./src/getNaNoWordcount');
 
 // Merge all languages
 let lang = {};
@@ -17,7 +17,7 @@ commands.english = require('./languages/commands/english.json');
 lang.french = require('./languages/french.json');
 commands.french = require('./languages/commands/french.json');
 
-var minuteLength = 60;
+let minuteLength = 60;
 if (globalSettings.debug) {
     minuteLength = 1;
 }
@@ -37,72 +37,19 @@ client.on('ready', () => {
 
 var sprint = {};
 
-// function to log a message in the console
-function logMessage(msg, author, server) {
-    var currentTime = new Date();
-    var currentHour = currentTime.getHours();
-    var currentMinutes = currentTime.getMinutes();
-    var currentSeconds = currentTime.getSeconds();
-    var currentDay = currentTime.getDate();
-    var currentMonth = currentTime.getMonth() + 1;
-    var currentYear = currentTime.getFullYear();
-    if (currentDay < 10) {
-        currentDay = "0" + currentDay;
-    }
-    if (currentMonth < 10) {
-        currentMonth = "0" + currentMonth;
-    }
-    if (currentMinutes < 10) {
-        currentMinutes = "0" + currentMinutes;
-    }
-    if (currentSeconds < 10) {
-        currentSeconds = "0" + currentSeconds;
-    }
-    var timeNow = currentYear + "/" + currentMonth + "/" + currentDay + " : " + currentHour + ":" + currentMinutes + ":" + currentSeconds;
-    console.log("[" + timeNow + "] " + "[" + server + "] " + author + " " + msg);
-}
-
 function addUserToDb(id, user, house) {
     let newUser = {
         "NaNoUser": user,
         "house": house
     }
     userDb[id] = newUser;
-    var pushDb = JSON.stringify(userDb);
-    try {
-        fs.writeFile('users/users.json', pushDb)
-    }
-    catch (e) {
-        console.log("An error occurred while trying to save the user in the JSON:");
-        console.log(e);
-    }
-}
-
-function getNaNoWordcount(user) {
-    return new Promise(function (resolve, reject) {
-        urlToCall = "https://nanowrimo.org/wordcount_api/wc/" + user
-        let req = https.request(urlToCall, res => {
-            if (globalSettings.debug) {
-                console.log('statusCode:', res.statusCode);
-            }
-            res.on('data', (d) => {
-                parseString(d, function (err, result) {
-                    if (result.wc.user_wordcount != null) {
-                        resolve(result.wc.user_wordcount);
-                    } else if (result.wc.error == "user does not exist") {
-                        resolve("userNoExist");
-                    } else if (result.wc.error == "user does not have a current novel") {
-                        resolve("userNoNovel");
-                    }
-                })
-            });
-        });
-        req.on('error', (e) => {
-            console.error("Error while fetching the user wordcount :" + e);
-            reject("somethingWentWrong");
-        });
-        req.end();
-    });
+    let pushDb = JSON.stringify(userDb);
+    fs.writeFile('users/users.json', pushDb, (err) => {
+        if (err) {
+            console.log("An error occurred while trying to save the user in the JSON:");
+            console.log(err);
+        }
+    })
 }
 
 client.on('message', message => {
@@ -282,11 +229,9 @@ client.on('message', message => {
 
     // Prompts
     if (message.content == commands[messageLanguage].prompt) {
-        var themes = prompts.writingPrompts;
-        var randomNumberRaw = Math.floor(Math.random() * (themes.length) - 1);
-        var thisPrompt = themes[randomNumberRaw];
-        message.channel.send(lang[messageLanguage].showPrompt + thisPrompt);
-        logMessage("received prompt number " + randomNumberRaw, message.author.username, guildprop.name)
+        let currentPrompt = getPrompt();
+        message.channel.send(lang[messageLanguage].showPrompt + currentPrompt);
+        logMessage("received prompt: " + currentPrompt, message.author.username, guildprop.name)
     }
 
     // !help
@@ -366,14 +311,10 @@ client.on('message', message => {
         if (serverSettings[id]) {
             if (lang[newServerLanguage]) {
                 serverSettings[id].language = newServerLanguage;
-                try {
-                    fs.writeFile('serverSettings.json', JSON.stringify(serverSettings));
-                }
-                catch (e) {
+                fs.writeFile('serverSettings.json', JSON.stringify(serverSettings), (err) => {
                     logMessage("An error occured while trying to save the server settings.", "", guildprop.name)
-                    console.log(e);
-                }
-
+                    console.log(err);
+                });
                 message.channel.send("The language for this server was changed to " + newServerLanguage);
             } else {
                 message.channel.send('This language is invalid. The available languages are: English and French.');
@@ -385,13 +326,10 @@ client.on('message', message => {
             }
             serverSettings[id] = newServerSettings;
             let pushSettings = JSON.stringify(serverSettings);
-            try {
-                fs.writeFile('serverSettings.json', pushSettings);
-            }
-            catch (e) {
+            fs.writeFile('serverSettings.json', pushSettings, (err) => {
                 console.log("An error occured while trying to save the server settings.");
-                console.log(e);
-            }
+                console.log(err);
+            });
 
             message.channel.send("The language for this server was changed to " + newServerLanguage + ".");
         }

@@ -10,7 +10,7 @@
     "startSprint": "Sprint de ",
     "startSprint2": " minutes GO!",
     "sprintIntervalLength": "Les sprints se font par intervalle de 5 minutes.",
-    "usernameInvalid": "Désolé, je ne connais pas ton nom sur NaNoWriMo. Dis-moi le en utilisant `!my name is` :D",
+    "usernameInvalid": "Désolé, je ne connais pas ton nom sur NaNoWriMo. Dis-moi le en utilisant `!je m'appelle` :D",
     "noWordsYet": "Tu n'as toujours pas écrit de mots.",
     "userNotFound": "Le nom d'utilisateur que tu m'as donné n'existe pas :(",
     "userNotStarted": "Tu n'as toujours pas commencé de projet!",

@@ -1,0 +1,4 @@
+node_modules
+globalSettings\.dev\.json
+
+package-lock\.json
