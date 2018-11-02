@@ -43,14 +43,13 @@ function addUserToDb(id, user, house) {
         "house": house
     }
     userDb[id] = newUser;
-    var pushDb = JSON.stringify(userDb);
-    try {
-        fs.writeFile('users/users.json', pushDb)
-    }
-    catch (e) {
-        console.log("An error occurred while trying to save the user in the JSON:");
-        console.log(e);
-    }
+    let pushDb = JSON.stringify(userDb);
+    fs.writeFile('users/users.json', pushDb, (err) => {
+        if (err) {
+            console.log("An error occurred while trying to save the user in the JSON:");
+            console.log(err);
+        }
+    })
 }
 
 client.on('message', message => {
@@ -312,14 +311,10 @@ client.on('message', message => {
         if (serverSettings[id]) {
             if (lang[newServerLanguage]) {
                 serverSettings[id].language = newServerLanguage;
-                try {
-                    fs.writeFile('serverSettings.json', JSON.stringify(serverSettings));
-                }
-                catch (e) {
+                fs.writeFile('serverSettings.json', JSON.stringify(serverSettings), (err) => {
                     logMessage("An error occured while trying to save the server settings.", "", guildprop.name)
-                    console.log(e);
-                }
-
+                    console.log(err);
+                });
                 message.channel.send("The language for this server was changed to " + newServerLanguage);
             } else {
                 message.channel.send('This language is invalid. The available languages are: English and French.');
@@ -331,13 +326,10 @@ client.on('message', message => {
             }
             serverSettings[id] = newServerSettings;
             let pushSettings = JSON.stringify(serverSettings);
-            try {
-                fs.writeFile('serverSettings.json', pushSettings);
-            }
-            catch (e) {
+            fs.writeFile('serverSettings.json', pushSettings, (err) => {
                 console.log("An error occured while trying to save the server settings.");
-                console.log(e);
-            }
+                console.log(err);
+            });
 
             message.channel.send("The language for this server was changed to " + newServerLanguage + ".");
         }
