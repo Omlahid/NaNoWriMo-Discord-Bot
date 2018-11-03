@@ -26,5 +26,9 @@
     "cheeringMessage": "You can do it! https://38.media.tumblr.com/91599091501f182b0fbffab90e115895/tumblr_nq2o6lc0Kp1s7widdo1_250.gif",
     "showPrompt": "Your prompt is: ",
     "whoDaBest": "You da best!",
+    "customSpecifyCommand": "You need to specify a prompt and an answer for your message. Use the `--` operator before your prompt and answer (e.g., `!custom --my prompt --my answer`)",
+    "customCommandAdded": "The custom prompt and answer have been added.",
+    "customCommandChanged": "The custom answer has been modified.",
+    "customCommandsNeedToBeDifferent": "Your custom prompt and answer have to be different.",
     "helpMessage": "Hi! My name is Omlabot!\nHere is my command list:\n`!help`: To know my command list.\n`!sprint xx`: To start a sprint, where `xx` is the sprint length in minutes.\n`!wordcount`: To know the wordcount to achieve for today.\n`!prompt`: To get a random writing prompt.\n`!my name is xx`: So I know your NaNoWriMo username (replace xx with the username).\n`!my words`: To know how many words you have entered on the NaNoWriMo website.\n`!words xx`: Know the wordcount of another NaNoWriMo user (replace xx with their username).\n`!cheer`: To cheer you up.\n`Who da best?`: To know who's the best :) \nEnjoy!"
 }

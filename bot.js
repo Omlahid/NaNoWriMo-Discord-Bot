@@ -9,6 +9,9 @@ const getPrompt = require('./src/getPrompt');
 const logMessage = require('./src/logMessage');
 const getNaNoWordcount = require('./src/getNaNoWordcount');
 
+let customCommands = require('./customCommands/customcommands.json');
+let customResponses = require('./customCommands/customresponses.json');
+
 // Merge all languages
 let lang = {};
 let commands = {};
@@ -85,6 +88,54 @@ client.on('message', message => {
         }
     }
 
+    function createNewCustomCommand(command, response, guildCustomCommands, guildCustomResponses) {
+        guildCustomCommands.push(command);
+        guildCustomResponses.push(response);
+        customCommands[guildprop.id] = guildCustomCommands;
+        customResponses[guildprop.id] = guildCustomResponses;
+        fs.writeFile('./customCommands/customcommands.json', JSON.stringify(customCommands), (err) => {
+            if (err) {
+                console.log("An error occured while saving the custom commands for server: " + guildprop.id);
+                console.log(err);
+            }
+        });
+        fs.writeFile('./customCommands/customresponses.json', JSON.stringify(customResponses), (err) => {
+            if (err) {
+                console.log("An error occured while saving the custom response for server: " + guildprop.id);
+                console.log(err);
+            }
+        });
+        return "new";
+    }
+
+    function addCustomCommand(command, response) {
+        if (command == response) {
+            return "same";
+        }
+        if (!customCommands[guildprop.id]) {
+            customCommands[guildprop.id] = [];
+            let guildCustomCommands = [];
+            let guildCustomResponses = [];
+            return createNewCustomCommand(command, response, guildCustomCommands, guildCustomResponses);
+        } else {
+            let guildCustomCommands = customCommands[guildprop.id];
+            let guildCustomResponses = customResponses[guildprop.id];
+        
+            if(guildCustomCommands.some(function(e){return e == command})){
+                guildCustomResponses[guildCustomCommands.indexOf(command)] = response;
+                fs.writeFile('./customCommands/customresponses.json', JSON.stringify(customResponses), (err) => {
+                    if (err) {
+                        console.log("An error occured while saving the custom response for server: " + guildprop.id);
+                        console.log(err);
+                    }
+                });
+                return "changed";
+            } else {
+                return createNewCustomCommand(command, response, guildCustomCommands, guildCustomResponses);
+            }
+        }
+    }
+
     let guildprop = {};
 
     if (message.guild) {
@@ -126,6 +177,39 @@ client.on('message', message => {
 
     if (!sprint[guildprop.id]) {
         sprint[guildprop.id] = { "isSprintStarted": false };
+    }
+
+    if(!customCommands[guildprop.id]) {
+        customCommands[guildprop.id] = [];
+    }
+
+    if(!customResponses[guildprop.id]) {
+        customResponses[guildprop.id] = [];
+    }
+
+    // Check custom commands
+    if (customCommands[guildprop.id].some(function(e){return e == message.content})) {
+        const customCommandNumber = customCommands[guildprop.id].indexOf(message.content);
+        message.channel.send(customResponses[guildprop.id][customCommandNumber]);
+    }
+
+    // Register new commands
+    if (message.content.startsWith("!custom") && isUserAdmin(message.member)) {
+        const messageArgs = message.content.split("--");
+        if (!messageArgs[2] || messageArgs[1].trim() == "" || messageArgs[2].trim() == "") {
+            message.channel.send(lang[messageLanguage].customSpecifyCommand)
+        } else {
+            const addCommand = addCustomCommand(messageArgs[1].trim(), messageArgs[2].trim());
+            if (addCommand == "new") {
+                message.channel.send(lang[messageLanguage].customCommandAdded);
+            } else if (addCommand == "changed") {
+                message.channel.send(lang[messageLanguage].customCommandChanged);
+            } else if (addCommand == "same") {
+                message.channel.send(lang[messageLanguage].customCommandsNeedToBeDifferent);
+            } else {
+                message.channel.send(lang[messageLanguage].somethingWentWrong);
+            }
+        }
     }
 
     // Register users
@@ -312,8 +396,10 @@ client.on('message', message => {
             if (lang[newServerLanguage]) {
                 serverSettings[id].language = newServerLanguage;
                 fs.writeFile('serverSettings.json', JSON.stringify(serverSettings), (err) => {
-                    logMessage("An error occured while trying to save the server settings.", "", guildprop.name)
-                    console.log(err);
+                    if (err) {
+                        logMessage("An error occured while trying to save the server settings.", "", guildprop.name)
+                        console.log(err);
+                    }
                 });
                 message.channel.send("The language for this server was changed to " + newServerLanguage);
             } else {
@@ -327,8 +413,10 @@ client.on('message', message => {
             serverSettings[id] = newServerSettings;
             let pushSettings = JSON.stringify(serverSettings);
             fs.writeFile('serverSettings.json', pushSettings, (err) => {
-                console.log("An error occured while trying to save the server settings.");
-                console.log(err);
+                if (err) {
+                    console.log("An error occured while trying to save the server settings.");
+                    console.log(err);
+                }
             });
 
             message.channel.send("The language for this server was changed to " + newServerLanguage + ".");
